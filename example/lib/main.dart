@@ -81,6 +81,7 @@ class _ScreenState extends State<Screen> {
       amount: _amountController.text,
       app: app.upiApplication,
       receiverName: 'Sharad',
+      transactionId: '',
       receiverUpiAddress: _upiAddressController.text,
       transactionRef: transactionRef,
       transactionNote: 'UPI Payment',

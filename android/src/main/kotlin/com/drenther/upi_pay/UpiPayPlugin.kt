@@ -42,6 +42,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     val pn: String? = call.argument("pn")
     val mc: String? = call.argument("mc")
     val tr: String? = call.argument("tr")
+    val tid: String? = call.argument("tid")
     val tn: String? = call.argument("tn")
     val am: String? = call.argument("am")
     val cu: String? = call.argument("cu")
@@ -55,7 +56,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
        * 'abc 40upi' by these apps. The URI building logic is changed to avoid URL encoding
        * of the value of 'pa' parameter. - Reetesh
       */
-      val intentUri = if (uri != null) {
+     /* val intentUri = if (uri != null) {
         Uri.parse(uri)
       } else {
         var uriStr: String? = "upi://pay?pa=" + pa +
@@ -74,7 +75,24 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         }
         uriStr += "&mode=00" // &orgid=000000"
         Uri.parse(uriStr)
+      }*/
+      var uriStr: String? = "upi://pay?pa=" + pa +
+              "&pn=" + Uri.encode(pn) +
+              "&tr=" + Uri.encode(tr) +
+              "&tid=" + Uri.encode(tid) +
+              "&am=" + Uri.encode(am) +
+              "&cu=" + Uri.encode(cu)
+      if(url != null) {
+        uriStr += ("&url=" + Uri.encode(url))
       }
+      if(mc != null) {
+        uriStr += ("&mc=" + Uri.encode(mc))
+      }
+      if(tn != null) {
+        uriStr += ("&tn=" + Uri.encode(tn))
+      }
+     // uriStr += "&mode=00" // &orgid=000000"
+      val intentUri = Uri.parse(uriStr)
       // Log.d("upi_pay", "initiateTransaction URI: " + uri.toString())
 
       val intent = Intent(Intent.ACTION_VIEW, intentUri)

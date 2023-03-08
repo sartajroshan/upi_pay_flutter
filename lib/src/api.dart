@@ -57,6 +57,7 @@ class UpiPay {
     required String receiverUpiAddress,
     required String receiverName,
     required String transactionRef,
+    required String transactionId,
     required String amount,
     String? url,
     String? transactionNote,
@@ -68,7 +69,7 @@ class UpiPay {
       transactionRef: transactionRef,
       amount: amount,
       url: url,
-      transactionNote: transactionNote,
+      transactionNote: transactionNote, transactionId: transactionId,
     );
     return await _transactionHelper.transact(_channel, transactionDetails);
   }

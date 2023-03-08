@@ -9,14 +9,14 @@ extension TransParse on String {
       params[key] = value;
     });
 
-    List<String> parts = this.split('?');
+    /*  List<String> parts = this.split('?');
 
     String encodedParams = parts[1]
         .split('&')
         .map((p) => p.startsWith('pa=') ? p : Uri.encodeComponent(p))
         .join('&');
 
-    String encodedUrl = '${parts[0]}?$encodedParams';
+    String encodedUrl = '${parts[0]}?$encodedParams';*/
 
     String payeeAddress = params['pa']!;
     String payeeName = params['pn']!;
@@ -25,14 +25,16 @@ extension TransParse on String {
     String amount = params['am']!;
     String currency = params['cu']!;
     String transactionNote = params['tn']!;
-    return TransactionDetails.fromUri(
-        encodedUrl,
+    return TransactionDetails(
         upiApplication: upiApplication,
         payeeAddress: payeeAddress,
         payeeName: payeeName,
         transactionRef: transactionRef,
-        amount: Decimal.parse(amount),
+        amount: amount,
         currency: currency,
+        transactionId: transactionId,
+        transactionNote: transactionNote,
+        uri: this,
         merchantCode: '');
   }
 }
@@ -44,7 +46,7 @@ class TransactionDetails {
   final UpiApplication upiApplication;
   final String payeeAddress;
   final String payeeName;
-  final String transactionRef;
+  final String transactionRef, transactionId;
   final String currency;
   final Decimal amount;
   final String? url;
@@ -57,6 +59,7 @@ class TransactionDetails {
       required this.payeeAddress,
       required this.payeeName,
       required this.transactionRef,
+      required this.transactionId,
       this.currency: TransactionDetails._currency,
       required String amount,
       this.url,
@@ -82,16 +85,6 @@ class TransactionDetails {
     }
   }
 
-  TransactionDetails.fromUri(this.uri,
-      {required this.payeeAddress,
-      required this.payeeName,
-      required this.transactionRef,
-      required this.currency,
-      required this.amount,
-      this.url,
-      required this.merchantCode,
-      this.transactionNote,
-      required this.upiApplication});
 
   Map<String, dynamic> toJson() {
     return {
@@ -99,6 +92,7 @@ class TransactionDetails {
       'pa': payeeAddress,
       'pn': payeeName,
       'tr': transactionRef,
+      'tid': transactionId,
       'cu': currency,
       'am': amount.toString(),
       'url': url,
@@ -109,10 +103,11 @@ class TransactionDetails {
   }
 
   String toString() {
-    if(uri == null) {
+    if (uri == null) {
       String cUri = 'upi://pay?pa=$payeeAddress'
           '&pn=${Uri.encodeComponent(payeeName)}'
           '&tr=$transactionRef'
+          '&tid=$transactionId'
           '&tn=${Uri.encodeComponent(transactionNote!)}'
           '&am=${amount.toString()}'
           '&cu=$currency';
