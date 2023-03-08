@@ -73,6 +73,12 @@ class UpiPay {
     return await _transactionHelper.transact(_channel, transactionDetails);
   }
 
+  static Future<UpiTransactionResponse> initiateTransactionWithUri(
+      {required UpiApplication app, required String uri}) async {
+    final transactionDetails = uri.toTransactionDetails(app);
+    return await _transactionHelper.transact(_channel, transactionDetails);
+  }
+
   /// Finds installed UPI payment applications.
   ///
   /// Default behaviour is to present all applications verified to be working

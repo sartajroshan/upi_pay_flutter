@@ -2,7 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:upi_pay/src/exceptions.dart';
 
-extension on String {
+extension TransParse on String {
   TransactionDetails toTransactionDetails(UpiApplication upiApplication) {
     Map<String, String> params = {};
     Uri.parse(this).queryParameters.forEach((key, value) {
