@@ -2,6 +2,41 @@ import 'package:decimal/decimal.dart';
 import 'package:upi_pay/src/applications.dart';
 import 'package:upi_pay/src/exceptions.dart';
 
+extension on String {
+  TransactionDetails toTransactionDetails(UpiApplication upiApplication) {
+    Map<String, String> params = {};
+    Uri.parse(this).queryParameters.forEach((key, value) {
+      params[key] = value;
+    });
+
+    List<String> parts = this.split('?');
+
+    String encodedParams = parts[1]
+        .split('&')
+        .map((p) => p.startsWith('pa=') ? p : Uri.encodeComponent(p))
+        .join('&');
+
+    String encodedUrl = '${parts[0]}?$encodedParams';
+
+    String payeeAddress = params['pa']!;
+    String payeeName = params['pn']!;
+    String transactionRef = params['tr']!;
+    String transactionId = params['tid']!;
+    String amount = params['am']!;
+    String currency = params['cu']!;
+    String transactionNote = params['tn']!;
+    return TransactionDetails.fromUri(
+        encodedUrl,
+        upiApplication: upiApplication,
+        payeeAddress: payeeAddress,
+        payeeName: payeeName,
+        transactionRef: transactionRef,
+        amount: Decimal.parse(amount),
+        currency: currency,
+        merchantCode: '');
+  }
+}
+
 class TransactionDetails {
   static const String _currency = 'INR';
   static const int _maxAmount = 100000;
@@ -15,18 +50,20 @@ class TransactionDetails {
   final String? url;
   final String merchantCode;
   final String? transactionNote;
+  final String? uri;
 
-  TransactionDetails({
-    required this.upiApplication,
-    required this.payeeAddress,
-    required this.payeeName,
-    required this.transactionRef,
-    this.currency: TransactionDetails._currency,
-    required String amount,
-    this.url,
-    this.merchantCode: '',
-    this.transactionNote: 'UPI Transaction',
-  }) : amount = Decimal.parse(amount) {
+  TransactionDetails(
+      {required this.upiApplication,
+      required this.payeeAddress,
+      required this.payeeName,
+      required this.transactionRef,
+      this.currency: TransactionDetails._currency,
+      required String amount,
+      this.url,
+      this.merchantCode: '',
+      this.transactionNote: 'UPI Transaction',
+      this.uri})
+      : amount = Decimal.parse(amount) {
     if (!_checkIfUpiAddressIsValid(payeeAddress)) {
       throw InvalidUpiAddressException();
     }
@@ -45,6 +82,17 @@ class TransactionDetails {
     }
   }
 
+  TransactionDetails.fromUri(this.uri,
+      {required this.payeeAddress,
+      required this.payeeName,
+      required this.transactionRef,
+      required this.currency,
+      required this.amount,
+      this.url,
+      required this.merchantCode,
+      this.transactionNote,
+      required this.upiApplication});
+
   Map<String, dynamic> toJson() {
     return {
       'app': upiApplication.toString(),
@@ -56,23 +104,40 @@ class TransactionDetails {
       'url': url,
       'mc': merchantCode,
       'tn': transactionNote,
+      'uri': uri
     };
   }
 
   String toString() {
-    String uri = 'upi://pay?pa=$payeeAddress'
-        '&pn=${Uri.encodeComponent(payeeName)}'
-        '&tr=$transactionRef'
-        '&tn=${Uri.encodeComponent(transactionNote!)}'
-        '&am=${amount.toString()}'
-        '&cu=$currency';
-    if (url != null && url!.isNotEmpty) {
-      uri += '&url=${Uri.encodeComponent(url!)}';
+    if(uri == null) {
+      String cUri = 'upi://pay?pa=$payeeAddress'
+          '&pn=${Uri.encodeComponent(payeeName)}'
+          '&tr=$transactionRef'
+          '&tn=${Uri.encodeComponent(transactionNote!)}'
+          '&am=${amount.toString()}'
+          '&cu=$currency';
+      if (url != null && url!.isNotEmpty) {
+        cUri += '&url=${Uri.encodeComponent(url!)}';
+      }
+      if (merchantCode.isNotEmpty) {
+        cUri += '&mc=${Uri.encodeComponent(merchantCode)}';
+      }
+      return cUri;
     }
-    if (merchantCode.isNotEmpty) {
-      uri += '&mc=${Uri.encodeComponent(merchantCode)}';
-    }
-    return uri;
+    Map<String, String> params = {};
+    Uri.parse(uri!).queryParameters.forEach((key, value) {
+      params[key] = value;
+    });
+
+    List<String> parts = uri!.split('?');
+
+    String encodedParams = parts[1]
+        .split('&')
+        .map((p) => p.startsWith('pa=') ? p : Uri.encodeComponent(p))
+        .join('&');
+
+    String encodedUrl = '${parts[0]}?$encodedParams';
+    return encodedUrl;
   }
 }
 
