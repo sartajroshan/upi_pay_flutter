@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
+import android.app.Activity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -18,10 +19,13 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
+import io.flutter.plugin.common.PluginRegistry.Registrar
 
 
 
-class UpiPayPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
+
+class UpiPayPlugin : MethodCallHandler, FlutterPlugin, ActivityAware, ActivityResultListener {
 
   private var methodChannel: MethodChannel? = null
   lateinit var activity: Activity
@@ -32,7 +36,7 @@ class UpiPayPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
   var hasResponded = false
 
   override fun onAttachedToEngine(binding: FlutterPluginBinding) {
-    this.applicationContext = binding.applicationContext
+    //this.applicationContext = binding.applicationContext
     methodChannel = MethodChannel(binding.binaryMessenger, "upi_pay")
     methodChannel!!.setMethodCallHandler(this)
   }
@@ -43,12 +47,14 @@ class UpiPayPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity as FlutterActivity
+    binding.addActivityResultListener(this)
 
   }
   override fun onDetachedFromActivityForConfigChanges() {
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    binding.addActivityResultListener(this)
   }
 
   override fun onDetachedFromActivity() {
@@ -218,12 +224,12 @@ class UpiPayPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
   }
 
   companion object {
-    @JvmStatic
+   /* @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "upi_pay")
       val plugin = UpiPayPlugin(registrar, channel)
       registrar.addActivityResultListener(plugin)
       channel.setMethodCallHandler(plugin)
-    }
+    }*/
   }
 }
