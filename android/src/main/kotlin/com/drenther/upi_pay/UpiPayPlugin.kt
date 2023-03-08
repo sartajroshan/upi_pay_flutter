@@ -12,17 +12,48 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.io.ByteArrayOutputStream
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
-class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodChannel) : MethodCallHandler, ActivityResultListener {
-  private val activity = registrar.activity()
+
+
+class UpiPayPlugin : MethodCallHandler, FlutterPlugin, ActivityAware {
+
+  private var methodChannel: MethodChannel? = null
+  lateinit var activity: Activity
 
   private var result: Result? = null
   private var requestCodeNumber = 201119
 
   var hasResponded = false
+
+  override fun onAttachedToEngine(binding: FlutterPluginBinding) {
+    this.applicationContext = binding.applicationContext
+    methodChannel = MethodChannel(binding.binaryMessenger, "upi_pay")
+    methodChannel!!.setMethodCallHandler(this)
+  }
+
+  override fun onDetachedFromEngine(binding: FlutterPluginBinding) {
+    methodChannel!!.setMethodCallHandler(null)
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    activity = binding.activity as FlutterActivity
+
+  }
+  override fun onDetachedFromActivityForConfigChanges() {
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+  }
+
+  override fun onDetachedFromActivity() {
+  }
+
 
   override fun onMethodCall(call: MethodCall, result: Result) {
     hasResponded = false
