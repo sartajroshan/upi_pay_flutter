@@ -80,5 +80,6 @@
         <package android:name="in.org.npci.upiapp" />
         <package android:name="money.bullet" />
         <package android:name="net.one97.paytm" />
+        <package android:name="money.super.payments" />
     </queries>
 </manifest>

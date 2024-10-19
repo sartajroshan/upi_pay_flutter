@@ -120,6 +120,17 @@ class UpiPay {
     );
   }
 
+  static Uri getUpiIntentUrlForApp(Uri upi, String scheme) {
+    final customSchemes = [UpiApplication.googlePay.discoveryCustomScheme!,
+    UpiApplication.cred.discoveryCustomScheme!
+    ];
+    if (customSchemes.contains(scheme)) {
+      return upi.replace(scheme: scheme, host: "upi", path: "pay");
+    } else {
+      return upi.replace(scheme: scheme);
+    }
+  }
+
   static final Map<UpiApplication, UpiApplicationStatus>
       _upiApplicationStatuses = {
     UpiApplication.googlePay: UpiApplicationStatus.googlePay,
@@ -196,5 +207,6 @@ class UpiPay {
     UpiApplication.whatsApp: UpiApplicationStatus.whatsApp,
     UpiApplication.yesBank: UpiApplicationStatus.yesBank,
     UpiApplication.yuvaPay: UpiApplicationStatus.yuvaPay,
+    UpiApplication.superMoney: UpiApplicationStatus.superMoney,
   };
 }

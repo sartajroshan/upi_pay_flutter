@@ -37,6 +37,13 @@ class UpiApplication {
     }
   }
 
+  /// Super Money By Flipkart
+  static final superMoney = UpiApplication(
+    androidPackageName: 'money.super.payments',
+    iosBundleId: 'money.super.payments',
+    appName: 'Super Money',
+  );
+
   /// Google Pay
   static final googlePay = UpiApplication(
     androidPackageName: 'com.google.android.apps.nbu.paisa.user',
@@ -379,7 +386,7 @@ class UpiApplication {
     androidPackageName: 'com.dreamplug.androidapp',
     iosBundleId: 'com.dreamplug.cred',
     appName: 'CRED',
-    discoveryCustomScheme: 'cred',
+    discoveryCustomScheme: 'credpay',
   );
 
   /// City Union Bank's app for account holders that also includes BHIM UPI

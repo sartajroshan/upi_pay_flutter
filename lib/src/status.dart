@@ -18,6 +18,10 @@ class UpiApplicationStatus {
     androidStatus: _androidSatusDailyTxnLimitExceeded,
     iosStatus: _iosStatusWorks,
   );
+  static final UpiApplicationStatus superMoney = UpiApplicationStatus(
+    androidStatus: _androidSatusDailyTxnLimitExceeded,
+    iosStatus: _iosStatusDailyTxnLimitExceeded,
+  );
   static final UpiApplicationStatus sbiPay = UpiApplicationStatus(
     androidStatus: _androidStatusPaymentFailsWithSecurityWarning,
     iosStatus: _iosStatusUpiSupportedNoUpiScheme,
