@@ -35,6 +35,7 @@ In `Runner/Info.plist` add or modify the `LSApplicationQueriesSchemes` key so it
   <array>
     ...
     <string>freecharge</string>
+    <string>credpay</string>
     <string>gpay</string>
     <string>in.fampay.app</string>
     <string>lotza</string>

@@ -389,7 +389,6 @@ class UpiApplication {
     iosBundleId: 'com.dreamplug.cred',
     appName: 'CRED',
     discoveryCustomScheme: 'credpay',
-    discoveryUri: "credpay://upi/pay?pa=test@test"
   );
 
   /// City Union Bank's app for account holders that also includes BHIM UPI
