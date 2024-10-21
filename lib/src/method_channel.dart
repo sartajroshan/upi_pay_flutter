@@ -44,4 +44,12 @@ class UpiMethodChannel {
     }
     throw UnsupportedError('The `canLaunch` call is supported only on iOS');
   }
+
+  Future<bool?> canLaunchCustomUri(String uri) async {
+    if (io.Platform.isIOS) {
+      return await _channel
+          .invokeMethod<bool>('canLaunch', {'uri': uri});
+    }
+    throw UnsupportedError('The `canLaunch` call is supported only on iOS');
+  }
 }

@@ -23,12 +23,14 @@ class UpiApplication {
   /// app implements. Any such unique custom scheme, if available, is stored in
   /// this attribute to be used for discovering this app.
   final String? discoveryCustomScheme;
+  final String? discoveryUri;
 
   UpiApplication({
     required this.androidPackageName,
     this.iosBundleId,
     required this.appName,
     this.discoveryCustomScheme,
+    this.discoveryUri
   }) {
     if (io.Platform.isAndroid) {
       lookUpMap[this.androidPackageName] = this;
@@ -387,6 +389,7 @@ class UpiApplication {
     iosBundleId: 'com.dreamplug.cred',
     appName: 'CRED',
     discoveryCustomScheme: 'credpay',
+    discoveryUri: "credpay://upi/pay?pa=test@test"
   );
 
   /// City Union Bank's app for account holders that also includes BHIM UPI

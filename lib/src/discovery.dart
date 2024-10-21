@@ -144,10 +144,15 @@ class _IosDiscovery implements _PlatformDiscoveryBase {
     final keys = discoveryMap.keys.toList();
     for (int idx = 0; idx < discoveryMap.length; ++idx) {
       final scheme = keys[idx];
+      final app = discoveryMap[scheme];
       try {
         final bool? result = await upiMethodChannel.canLaunch(scheme);
+        bool? uriResult;
+        if (app?.discoveryUri != null) {
+          uriResult = await upiMethodChannel.canLaunchCustomUri(app!.discoveryUri!);
+        }
         // print('$scheme, launch-able: $result');
-        if (result == true) {
+        if (result == true || uriResult == true) {
           discovered.add(discoveryMap[scheme]!);
         }
       } catch (error, stack) {
