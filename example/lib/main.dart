@@ -190,9 +190,9 @@ class _ScreenState extends State<Screen> {
               child: Text('Initiate Transaction',
                   style: Theme.of(context)
                       .textTheme
-                      .button!
+                      .labelLarge!
                       .copyWith(color: Colors.white)),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               height: 48,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
@@ -213,7 +213,7 @@ class _ScreenState extends State<Screen> {
             margin: EdgeInsets.only(bottom: 12),
             child: Text(
               'Pay Using',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
           if (_apps != null) _appsGrid(_apps!.map((e) => e).toList()),
@@ -233,14 +233,14 @@ class _ScreenState extends State<Screen> {
             child: Text(
               'One of these will be invoked automatically by your phone to '
               'make a payment',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 12),
             child: Text(
               'Detected Installed Apps',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
           if (_apps != null) _discoverableAppsGrid(),
@@ -248,7 +248,7 @@ class _ScreenState extends State<Screen> {
             margin: EdgeInsets.only(top: 12, bottom: 12),
             child: Text(
               'Other Supported Apps (Cannot detect)',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
           if (_apps != null) _nonDiscoverableAppsGrid(),

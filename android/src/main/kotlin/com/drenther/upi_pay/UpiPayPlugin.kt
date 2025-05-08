@@ -20,7 +20,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
-import io.flutter.plugin.common.PluginRegistry.Registrar
+//import io.flutter.plugin.common.PluginRegistry.Registrar
 
 
 
