@@ -44,6 +44,7 @@ class UpiApplication {
     androidPackageName: 'money.super.payments',
     iosBundleId: 'money.super.payments',
     appName: 'Super Money',
+    discoveryCustomScheme: 'super.money',
   );
 
   /// Google Pay
